@@ -1,0 +1,28 @@
+# Environments
+.env
+
+# Python / FastAPI
+api_project/venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Node / Hardhat
+contracts_project/node_modules/
+node_modules/
+contracts_project/artifacts/
+contracts_project/cache/
+contracts_project/coverage/
+contracts_project/coverage.json
+contracts_project/typechain-types/
+
+# OS-generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
