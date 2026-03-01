@@ -1,0 +1,157 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "string",
+        "name": "documentId",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "issuerId",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "holderId",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "hashedContent",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isActive",
+        "type": "bool"
+      }
+    ],
+    "name": "DocumentStored",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_documentId",
+        "type": "string"
+      }
+    ],
+    "name": "getDocument",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "documentId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "issuerId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "holderId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "hashedContent",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "isActive",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string[]",
+        "name": "_documentIds",
+        "type": "string[]"
+      }
+    ],
+    "name": "getDocuments",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "documentId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "issuerId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "holderId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "hashedContent",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isActive",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct DocumentStorage.Document[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_documentId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_issuerId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_holderId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_hashedContent",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isActive",
+        "type": "bool"
+      }
+    ],
+    "name": "storeDocument",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

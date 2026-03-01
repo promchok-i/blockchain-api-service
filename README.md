@@ -1,4 +1,4 @@
-# Fast Web3 Project
+# Blockchain API Service
 
 This project demonstrates a simple integration between a **Hardhat** smart contract environment and a **FastAPI** web service. It allows you to read from and write data to the Ethereum Sepolia Testnet using Python!
 
@@ -44,7 +44,11 @@ The project is split into two main functional areas, but they share a single roo
    ```bash
    npx hardhat run scripts/deploy.js --network sepolia
    ```
-5. **Update `.env`:** Copy the deployed contract address printed in the terminal and update the `CONTRACT_ADDRESS` variable in your root `.env` file.
+5. **Verify the Contract:** Verify the deployed smart contract on Etherscan:
+   ```bash
+   npx hardhat verify --network sepolia <your_deployed_contract_address_here>
+   ```
+6. **Update `.env`:** Copy the deployed contract address printed in the terminal and update the `CONTRACT_ADDRESS` variable in your root `.env` file.
 
 ### FastAPI Setup & Running (`api_project`)
 1. Open a terminal and navigate to the API directory:
@@ -60,30 +64,39 @@ The project is split into two main functional areas, but they share a single roo
    ```bash
    pip install -r requirements.txt
    ```
-4. **Run the API:** Start the Uvicorn server:
+4. **Update ABI:** Run the `update_abi.py` script to copy the updated compiled artifacts into the API:
    ```bash
-   uvicorn main:app --reload
+   python3 update_abi.py
    ```
-5. **Testing the API:**
+5. **Run the API:** Start the FastAPI dev server:
+   ```bash
+   fastapi dev main.py
+   ```
+6. **Testing the API:**
    - Open your browser and navigate to `http://127.0.0.1:8000/docs` to view the Swagger UI.
-   - You can use the `GET /data` endpoint to read the current state of the blockchain.
-   - You can use the `POST /data` endpoint with a JSON body `{"data": "Your Message"}` to write new data to the blockchain.
+   - You can use the `POST /document` endpoint to store a new document with fields like `document_id`, `issuer_id`, `holder_id`, `hashed_content`, and `is_active`.
+   - You can use the `GET /document/{document_id}` endpoint to retrieve a stored document.
+   - You can use the `POST /documents/query` endpoint for bulk retrieval of documents.
 
 ---
 
 ## 2. Smart Contract Logic
 
-The smart contract (`contracts_project/contracts/DataStorage.sol`) is written in Solidity `^0.8.20`. It is a simple storage contract intended to demonstrate basic read and write operations on the blockchain.
+The smart contract (`contracts_project/contracts/DocumentStorage.sol`) is written in Solidity `^0.8.20`. It enables robust, scalable on-chain document proof verification.
 
 ### Core Components:
-- **`string private data`**:
-  A private state variable that holds a string of text. Since it is stored on the Ethereum blockchain, changing this value requires a transaction and costs gas.
 
-- **`event DataStored(string newData)`**:
-  An event that is emitted every time the `data` variable is updated. Events are crucial in DApps because they allow external consumers (like frontends or indexers) to efficiently listen for changes on the blockchain without constantly polling the contract.
+- **`struct Document` & Storage Maps**:
+  Documents are modeled using a struct containing `documentId`, `issuerId`, `holderId`, `hashedContent`, and `isActive`. These are stored in a mapping for optimized retrieval.
 
-- **`function setData(string memory _data) public`**:
-  A function that modifies the blockchain's state. It accepts a string `_data`, updates the `data` state variable, and emits the `DataStored` event. Calling this function requires a signed transaction and consumes gas. 
+- **`event DocumentStored(...)`**:
+  An event emitted whenever a new document is stored. Events allow external consumers (like indexers or frontends) to query and track historical data without constantly accessing contract state.
 
-- **`function getData() public view returns (string memory)`**:
-  A function that reads the current value of the `data` state variable. Because it uses the `view` modifier, it promises not to modify the state of the blockchain. Therefore, calling this function does **not** cost any gas and does not require a signed transaction; it is a free read operation.
+- **`function storeDocument(...) public`**:
+  Modifies the blockchain's state by adding a new document into storage. It requires a signed transaction and consumes gas.
+
+- **`function getDocument(string memory _documentId) public view returns (...)`**:
+  Retrieves a specific document. Since it is a `view` function, it does not cost gas and does not require a transaction signature; it operates as a free read operation.
+
+- **`function getDocuments(string[] memory _documentIds) public view returns (...)`**:
+  Allows batch retrieval of multiple documents at once, reducing the overhead of repeated API calls.
