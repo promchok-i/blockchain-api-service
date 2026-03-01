@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from typing import List
 
 
-
 class DocumentInput(BaseModel):
     document_id: str
     issuer_id: str

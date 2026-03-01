@@ -5,7 +5,6 @@ from constants import PRIVATE_KEY, w3, contract
 router = APIRouter()
 
 
-
 @router.post("/document")
 async def create_document(payload: DocumentInput):
     if not contract or not w3:
@@ -16,7 +15,7 @@ async def create_document(payload: DocumentInput):
     try:
         account = w3.eth.account.from_key(PRIVATE_KEY)
         nonce = w3.eth.get_transaction_count(account.address)
-        
+
         tx = contract.functions.storeDocument(
             payload.document_id,
             payload.issuer_id,
@@ -28,7 +27,7 @@ async def create_document(payload: DocumentInput):
             'gasPrice': w3.eth.gas_price,
             'nonce': nonce,
         })
-        
+
         # Estimate gas manually or rely on build_transaction's auto-estimate depending on provider
         gas_estimate = contract.functions.storeDocument(
             payload.document_id,
@@ -37,7 +36,7 @@ async def create_document(payload: DocumentInput):
             payload.hashed_content,
             payload.is_active
         ).estimate_gas({'from': account.address})
-        
+
         tx['gas'] = gas_estimate
 
         signed_tx = w3.eth.account.sign_transaction(tx, private_key=PRIVATE_KEY)
@@ -46,9 +45,9 @@ async def create_document(payload: DocumentInput):
 
         return {
             "message": "Document created successfully",
-            "transaction_hash": tx_hash.hex(),
+            "transaction_hash": w3.to_hex(tx_hash),
             "status": tx_receipt.status,
-            "data": payload
+            "data": payload,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
