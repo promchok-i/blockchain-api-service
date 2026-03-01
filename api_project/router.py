@@ -1,11 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from schemas import DocumentInput, DocumentQueryInput
-from constants import PRIVATE_KEY
+from constants import PRIVATE_KEY, w3, contract
 
 router = APIRouter()
-
-w3 = None
-contract = None
 
 
 
